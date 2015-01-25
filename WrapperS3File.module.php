@@ -11,7 +11,7 @@
 class WrapperS3File extends Wiredata implements Module
 {
   // Defines where we "listen"
-  static $location = "/s3wrapper/";
+  static public $location = "/s3wrapper/";
   
   public function init()
   {
