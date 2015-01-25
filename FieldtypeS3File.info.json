@@ -1,0 +1,8 @@
+{
+  "title":   "S3 Files",
+  "version":  100,
+  "summary":  "Field that stores one or more files using Amazon S3 as backend",
+  "installs": [
+    "WrapperS3File"
+  ]
+}

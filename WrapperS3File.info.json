@@ -1,0 +1,7 @@
+{
+  "title":   "Wrapper S3 File",
+  "version":  100,
+  "summary":  "Module that hooks the wrapper for downloading S3 files",
+  "autoload": true,
+  "singular": true
+}
