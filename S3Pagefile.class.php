@@ -6,8 +6,8 @@ use Aws\S3\S3Client;
 use Aws\S3\Exception\NoSuchKeyException;
 use Guzzle\Http\EntityBody;
 
-class S3Pagefile extends Pagefile {
-
+class S3Pagefile extends Pagefile
+{
   protected $client;
   protected $aws_region;
   protected $aws_default_region;
@@ -46,14 +46,13 @@ class S3Pagefile extends Pagefile {
 
     // Respecting the parent constructor, which also sets empty values
     // These can change in setFilename() (which is called through the parent's
-    // constructor) - so setting them here
+    // constructor)
     $this->set('size', 0); 
     $this->set('s3_location', ''); 
     $this->set('s3_url', ''); 
     $this->set('s3_url_expires', ''); 
 
     parent::__construct($pagefiles, $filename);
-
   }
 
 
@@ -137,15 +136,15 @@ class S3Pagefile extends Pagefile {
     $basename = $this->pagefiles->cleanBasename($basename, false, false, true);
     $pathInfo = pathinfo($basename); 
 
-    $basename = basename($basename, ".$pathInfo[extension]"); 
+    $basename = basename($basename, ".{$pathInfo['extension']}"); 
     $basenameNoExt = $basename; 
-    $basename .= ".$pathInfo[extension]"; 
+    $basename .= ".{$pathInfo['extension']}"; 
 
     $cnt = 0; 
     while($file = $this->pagefiles->getFile($basename))
     {
       $cnt++;
-      $basename = "$basenameNoExt-$cnt.$pathInfo[extension]";
+      $basename = "{$basenameNoExt}-{$cnt}.{$pathInfo['extension']}";
     }
     return $basename;
   }
@@ -253,7 +252,6 @@ class S3Pagefile extends Pagefile {
     $newUrl = $this->client->getObjectUrl($this->s3_bucket, $key, $expires);
 
     return [$newUrl, strtotime($expires . " -30 seconds")];
-
   }
 
   public function updateUrl()
@@ -313,8 +311,12 @@ class S3Pagefile extends Pagefile {
     // TODO: We really need a Process module for this
     // Not returning directly since it's slow and PW finds the urls when editing the page, for an example
     // return $this->getObjectUrl($this->basename);
-    return $this->config->urls->root."s3wrapper/?page_id={$this->pagefiles->page->id}&field={$this->pagefiles->field->name}&basename=".urlencode($this->basename);
-    
+    $request = http_build_query([
+      'page_id'  => $this->pagefiles->page->id,
+      'field'    => $this->pagefiles->field->name,
+      'basename' => $this->basename,
+    ]);
+    return $this->config->urls->root."s3wrapper/?".$request;
   }
 
   public function filename()
