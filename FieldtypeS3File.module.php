@@ -50,7 +50,8 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
     return $pagefiles; 
   }
 
-  // Overriden so we can store size and url in the database
+  // Overriden so we can populate the S3-related fields from the database
+  // The rest is business as usual (as in FieldtypeFile)
   public function ___wakeupValue(Page $page, Field $field, $value)
   {
     if($value instanceof Pagefiles) return $value; 
@@ -79,10 +80,10 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
     return $pagefiles;  
   }
 
-  // Overriden so we can store size and url in the database
+  // Overriden so we can store S3-related values in the database
+  // The rest is business as usual (as in FieldtypeFile)
   public function ___sleepValue(Page $page, Field $field, $value)
   {
-
     $sleepValue = array();
     if(!$value instanceof Pagefiles) return $sleepValue; 
   
@@ -113,7 +114,6 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
 
   public function ___getConfigInputfields(Field $field)
   {
-
     $inputfields = parent::___getConfigInputfields($field);
 
     // TODO: Implement overridable S3 settings
@@ -163,6 +163,8 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
     $inputfields->add($field);
 
     // TODO: Create a Process-module for managing buckets etc so we can remove this
+    
+    // Display bucket "tools" if configuration is set
     if(isset($data['aws_access_key_id']) and isset($data['aws_secret_access_key']) and isset($data['aws_region']) and isset($data['aws_s3_default_bucket']))
     {
       $s3Client = S3Client::factory(array(
@@ -176,6 +178,7 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
       }
       else
       {
+        // Handle creation of a new bucket
         if(wire('input')->get->create)
         {
           try {
@@ -187,6 +190,7 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
           }
           wire('session')->redirect('edit?name=FieldtypeS3File');
         }
+        // Handle deletion
         elseif(wire('input')->get->delete)
         {
           try {
@@ -200,20 +204,18 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
           wire('session')->redirect('edit?name=FieldtypeS3File');
         }
 
+        // Display bucket status
         $exists = $s3Client->doesBucketExist($data['aws_s3_default_bucket']);
         $field = wire('modules')->get('InputfieldMarkup');
         $field->value = "Bucket exists: " . (($exists) ? "Yes" : "No");
         if(!$exists)
-        {
           $field->value.= "<br /><a href='edit?name=FieldtypeS3File&create=1'>Create</a>";
-        }
         else
-        {
           $field->value.= "<br /><a href='edit?name=FieldtypeS3File&delete=1'>Delete</a>";
-        }
         $inputfields->add($field);
       }
     }
+    
     return $inputfields; 
   }
 }
