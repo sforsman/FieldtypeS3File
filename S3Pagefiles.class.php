@@ -46,6 +46,6 @@ class S3Pagefiles extends Pagefiles
     // TODO: Since this seems to be a thing in the dev, I'm not really sure
     // if we should call parent::isTemp() and/or implement other logic in
     // the method
-    return (!$pagefile->wakeup);
+    return (!$pagefile->isStored());
   }
 }

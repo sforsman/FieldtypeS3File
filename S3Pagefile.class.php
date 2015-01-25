@@ -32,7 +32,7 @@ class S3Pagefile extends Pagefile
 
   // We want to track whether we are waking up from DB, because we *NEVER* want to install
   // a new file if we are
-  public $wakeup; 
+  protected $wakeup; 
 
   public function __construct(Pagefiles $pagefiles, $filename, $wakeup = false)
   {
@@ -74,7 +74,7 @@ class S3Pagefile extends Pagefile
   {
     // Check if we were called from wakeup, we *NEVER* want to end up installing
     // a new file then
-    if($this->wakeup)
+    if($this->isStored())
     {
       $this->set('basename', $filename);
       return;
@@ -379,5 +379,12 @@ class S3Pagefile extends Pagefile
     debug_print_backtrace();
     file_put_contents("/tmp/stack.txt", ob_get_contents());
     @ob_end_clean();
+  }
+
+  // A simple method to check if the file is stored. Currently this is true only when
+  // the object is created through wakeup
+  public function isStored()
+  {
+    return $this->wakeup;
   }
 }
