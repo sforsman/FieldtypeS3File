@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * S3 Pagefile
+ * 
+ * Represents a single file located on S3. Handles "installation" of the 
+ * file in the same quirky way the core Pagefile-class does, but with some
+ * additional checks to prevent accidental installation when waking up 
+ * from the database. These checks might prevent some API use cases, 
+ * however it is fully compatible with the PW admin.
+ * 
+ * Note: To "install" through the API, always provide the absolute path to 
+ * the file.
+ * 
+ */
+ 
 require_once __DIR__.'/vendor/autoload.php';
 
 use Aws\S3\S3Client;
