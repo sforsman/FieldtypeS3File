@@ -22,8 +22,8 @@ require_once __DIR__.'/S3Pagefiles.class.php';
 
 use Aws\S3\S3Client;
 
-class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule {
-
+class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule 
+{
   public function __construct()
   {
     parent::__construct();
