@@ -9,12 +9,10 @@ class S3Pagefiles extends Pagefiles
 
   public function add($item)
   {
-
     if(is_string($item))
     {
       $item = new S3Pagefile($this, $item); 
     }
-
     return parent::add($item); 
   }
 
