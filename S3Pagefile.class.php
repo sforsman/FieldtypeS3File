@@ -310,16 +310,6 @@ class S3Pagefile extends Pagefile
     }
   }
 
-  public function url()
-  {
-    return self::isHooked('S3Pagefile::url()') ? $this->__call('url', array()) : $this->___url();
-  }
-
-  protected function ___url()
-  {
-    return $this->___httpUrl();
-  }
-
   public function ___httpUrl()
   {
     // TODO: We really need a Process module for this
@@ -330,9 +320,26 @@ class S3Pagefile extends Pagefile
       'field'    => $this->pagefiles->field->name,
       'basename' => $this->basename,
     ]);
-    return $this->config->urls->root."s3wrapper/?".$request;
+    return rtrim($this->config->urls->root,'/') . WrapperS3File::$location . "?" . $request;
+  }
+  
+  public function unlink()
+  {
+    $key = $this->setLocation();
+    $this->deleteObject($key);
+    // $this->message("Deleted {$this->basename} from S3");
+  }
+  
+  public function url()
+  {
+    return self::isHooked('S3Pagefile::url()') ? $this->__call('url', array()) : $this->___url();
   }
 
+  protected function ___url()
+  {
+    return $this->___httpUrl();
+  }
+  
   public function filename()
   {
     return self::isHooked('S3Pagefile::filename()') ? $this->__call('filename', array()) : $this->___filename();
@@ -347,13 +354,6 @@ class S3Pagefile extends Pagefile
   public function filesize()
   {
     return $this->size;
-  }
-
-  public function unlink()
-  {
-    $key = $this->setLocation();
-    $this->deleteObject($key);
-    // $this->message("Deleted {$this->basename} from S3");
   }
 
   public function rename($basename)
