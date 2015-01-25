@@ -32,7 +32,7 @@ class S3Pagefile extends Pagefile
 
   // We want to track whether we are waking up from DB, because we *NEVER* want to install
   // a new file if we are
-  protected $wakeup; 
+  public $wakeup; 
 
   public function __construct(Pagefiles $pagefiles, $filename, $wakeup = false)
   {
@@ -369,5 +369,15 @@ class S3Pagefile extends Pagefile
   protected function ___install($filename)
   {
     throw new WireException("Never try to install using the regular install() method");
+  }
+
+  // Just a debug helper to get the call stack for AJAX calls (since Exceptions are not logged
+  // then)
+  protected function dumpStack()
+  {
+    @ob_start();
+    debug_print_backtrace();
+    file_put_contents("/tmp/stack.txt", ob_get_contents());
+    @ob_end_clean();
   }
 }

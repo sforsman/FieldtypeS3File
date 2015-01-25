@@ -39,4 +39,13 @@ class S3Pagefiles extends Pagefiles
     }
     return $fullpath;
   }
+
+  // Had to add this to be compatible with the latest dev(?)
+  public function isTemp(Pagefile $pagefile, $set = null)
+  {
+    // TODO: Since this seems to be a thing in the dev, I'm not really sure
+    // if we should call parent::isTemp() and/or implement other logic in
+    // the method
+    return (!$pagefile->wakeup);
+  }
 }

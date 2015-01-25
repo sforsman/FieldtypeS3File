@@ -36,7 +36,7 @@ class FieldtypeS3File extends FieldtypeFile implements ConfigurableModule
     return "pdf doc docx xls xlsx gif jpg jpeg png txt";
   }
 
-  protected function getBlankPagefile(Pagefiles $pagefiles, $filename,$wakeup = false)
+  protected function getBlankPagefile(Pagefiles $pagefiles, $filename, $wakeup = false)
   {
     return new S3Pagefile($pagefiles, $filename, $wakeup); 
   }
