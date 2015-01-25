@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * S3 Pagefiles
+ * 
+ * Container for instances of S3Pagefile. Basically this overrides only
+ * parts that would return a regular Pagefile-instance
+ * 
+ */
 class S3Pagefiles extends Pagefiles
 {
   public function makeBlankItem()
@@ -16,7 +23,8 @@ class S3Pagefiles extends Pagefiles
     return parent::add($item); 
   }
 
-  // These will always go to temp
+  // The PW upload mechanisms use this to decide on the destination dir
+  // (so instead of using assets, we force the files to /tmp)
   public function path()
   {
     // $this->config->paths->tmp is inside assets, so using system temp
