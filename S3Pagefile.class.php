@@ -196,22 +196,19 @@ class S3Pagefile extends Pagefile
 
   public function putObject($filename,$key)
   {
-    $this->client->putObject(array(
+    $this->client->putObject([
       'Bucket' => $this->s3_bucket,
       'Key'    => $key,
       'Body'   => EntityBody::factory(fopen($filename, 'r+'))
-    ));
+    ]);
   }
 
   public function objectExists($key)
   {
-    // TODO: Check if this loads the body somehow (probably not)
-    try {
-      $object = $this->getObject($key);
-    } catch(NoSuchKeyException $e) {
-      return false;
-    }
-    return true;
+    return $this->client->doesObjectExist([
+      'Bucket' => $this->s3_bucket,
+      'Key'    => $key,
+    ]);
   }
 
   public function setLocation()
