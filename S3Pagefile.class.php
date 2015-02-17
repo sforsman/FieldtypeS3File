@@ -134,7 +134,7 @@ class S3Pagefile extends Pagefile
     $empty = true;
     while(($file = readdir($dp)) !== false)
     {
-      if($file == "." or $file == "..")
+      if($file != "." and $file != "..")
       {
         $empty = false;
         break;
