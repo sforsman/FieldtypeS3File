@@ -7,15 +7,6 @@
  *
  */
 
-// TODO: More testing (the overwriting stuff, ZIP-upload, etc)
-// TODO: Image field
-// TODO: Process-module for handling buckets 
-// TODO: Remove Wrapper-module after the above is completed + Bucket creation from module
-// TODO: Add more settings (publicity, overrides from field settings, expiration, etc)
-// TODO: Image-field as well
-// TODO: Support other AWS credential-methods
-// TODO: Hooks to delete files from S3 when the field is destroyed(?)
-
 require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/S3Pagefile.class.php';
 require_once __DIR__.'/S3Pagefiles.class.php';

@@ -20,3 +20,16 @@ file stored on the local disk. The point here is that it might cause a lot of ac
 traffic ($$$) if used wrong (i.e. foreach($pagefiles as $file) { echo $file->filename(); })
 
 Also there is no FieldtypeS3Image yet.
+
+TODO
+----
+
+- More testing (the overwriting stuff, ZIP-upload, etc)
+- Image field (will probaly be extending this one instead of the PW-field)
+- Process-module for handling buckets
+- Prefix-settings (to support the S3 "folders" etc)
+- Remove Wrapper-module after the above is completed + Bucket creation from module
+- Add per field settings (publicity, buckets, expiration, etc)
+- Support other AWS credential-methods
+- Hooks to delete files from S3 when the field is destroyed(?)
+
